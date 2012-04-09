@@ -1,3 +1,5 @@
+.pryrc
+.rvmrc
 *.swp
 *.gem
 *.rbc
