@@ -17,12 +17,15 @@ require 'activevalidators'
 end
 
 class TestRecord
+
   include ActiveModel::Validations
-  attr_accessor :ip, :url, :slug, :responder, :global_condition,
+
+  attr_accessor :ip, :url, :slug, :image, :responder, :global_condition,
     :local_condition, :phone, :email, :card, :password, :twitter_username,
     :postal_code, :carrier, :tracking_number, :start_date, :end_date
 
   def initialize(attrs = {})
     attrs.each_pair { |k,v| send("#{k}=", v) }
   end
+
 end

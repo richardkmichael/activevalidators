@@ -1,5 +1,10 @@
 .pryrc
 .rvmrc
+.bundle
+.irb_history
+
+bin
+
 *.swp
 *.gem
 *.rbc

@@ -83,6 +83,22 @@ Lots of improvements can be made:
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+## Creating a new validator
+### Move this to a wiki entry
+
+* Uses minitest/spec
+* Create a gemset
+* bundle install --binstubs (insure dev gems are installed, minitest,
+  etc.)
+* Create spec / tests: 'test/validations/foo_test.rb' -> compare
+  existing spec files
+* If you want to make a new project which uses your activevalidators
+  fork for testing, in your project Gemfile use:
+  'gem "activevalidators", :path => "/path/to/your/fork"'
+* Verify bundler sees your fork: "bundle show -v" ("gem list" will not
+  show :path or :git sources gems)
+* Run you project with "bundle exec ruby my_project.rb" or "require
+  'bundler/setup'" in my_project.rb
 
 ## Contributors
 

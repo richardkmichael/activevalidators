@@ -1,4 +1,5 @@
 require 'mail'
+
 module ActiveModel
   module Validations
     class EmailValidator < EachValidator
