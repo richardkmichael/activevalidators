@@ -1,35 +1,50 @@
-require 'test_helper.rb'
+require 'pry'
+require 'test_helper'
 
 describe "Image Validation" do
 
-  # describe "format: any" do
+  VALID_IMAGES = [ { :format => :jpeg,
+                     :file   => '/Users/rmichael/Desktop/me.jpg' },
+                   { :format => :tiff,
+                     :file   => '/Users/rmichael/Desktop/me.tiff' },
+                   { :format => :png,
+                     :file   => '/Users/rmichael/Desktop/me.png' } ]
 
-  # end
+  VALID_IMAGES.each do |image|
 
-  describe "format: jpeg" do
+    # Test single image type validations, ex. ":format => :jpeg".
+    describe "format: #{image[:format]}" do
+      it "accepts #{image[:format]} format" do
+        subject = build_image_record(image[:format], { :image => image[:file] })
+        subject.valid?.must_equal true
+        subject.errors.size.must_equal 0
+      end
 
-    it "accepts jpeg format" do
-      subject = build_image_record :image => '/Users/rmichael/Desktop/me.jpg'
-      subject.valid?.must_equal true
-      subject.errors.size.must_equal 0
+      it "rejects other formats" do
+        # Test rejection using an image which is NOT the type of the validation currently being tested.
+        invalid_image = VALID_IMAGES.detect { |i| i[:format] != image[:format] }
+
+        subject = build_image_record(image[:format], { :image => invalid_image[:file] })
+        subject.valid?.must_equal false
+        subject.errors.size.must_equal 1
+      end
     end
 
-    # it "rejects other formats" do
-    # end
+    describe "format :any" do
+      it "accepts any of the known image types" do
+        subject = build_image_record(:any, { :image => image[:file] })
+        subject.valid?.must_equal true
+        subject.errors.size.must_equal 0
+      end
+    end
 
   end
 
-  # describe "format: tiff" do
-  # end
-
-  # describe "format: png" do
-  # end
-
-  def build_image_record(attrs = {}, opts = {})
+  def build_image_record(format, attributes = {})
     # TODO: What are these doing?
     TestRecord.reset_callbacks(:validate)
-    TestRecord.validates :image, :image => { :format => :jpeg }
+    TestRecord.validates :image, :image => { :format => format }
 
-    TestRecord.new attrs
+    TestRecord.new attributes
   end
 end

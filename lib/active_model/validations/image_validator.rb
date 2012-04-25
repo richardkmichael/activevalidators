@@ -45,9 +45,23 @@ module ActiveModel
         @width      = options[:width]
         @height     = options[:height]
 
-        if @format
-          record.errors.add(attribute) unless image_is_required_format?
+        # FIXME: Passing options[:format] = nil permits a valid record.
+        case @format
+        when Symbol
+          if @format != :any
+            record.errors.add(attribute) unless image_is_required_format?
+          end
+        when Hash
+          case @format.keys.first
+          when :only
+            inclusive = true
+          when :except
+            exclusive = true
+          end
         end
+
+      # if @format && @format != :any
+      # end
 
         if @dimensions
           record.errors.add(attribute) unless image_is_required_dimensions?
@@ -65,13 +79,6 @@ module ActiveModel
         @image[:dimensions] == @dimensions.split(/x|X/).map { |e| e.to_i }
       end
 
-      # def validates_with
-      #
-      # end
-
-      # def check_validity!
-      #
-      # end
     end
   end
 end
